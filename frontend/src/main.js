@@ -1,8 +1,7 @@
 // main.js
 import { createApp } from 'vue';
-import App from './components/App.vue';
+import App from './App.vue';
 import router from './router'; 
-import store from './store';
 import { createVuetify } from 'vuetify';
 import { mdiAccount } from '@mdi/js';
 import 'vuetify/styles';
@@ -12,15 +11,17 @@ import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import { fa } from "vuetify/iconsets/fa";
 import { aliases, mdi } from "vuetify/lib/iconsets/mdi";
+import { loadFonts } from './plugins/webfontloader'
+
+loadFonts()
 
 const app = createApp(App);
 
 app.use(router);
-app.use(store);
 
 const vuetify = createVuetify({
     theme: {
-      defaultTheme: "dark",
+      defaultTheme: "light",
     },
     icons: {
       defaultSet: "mdi",
