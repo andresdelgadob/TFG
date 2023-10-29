@@ -3,15 +3,7 @@
       clearable
       label="Idioma"
       :items="idiomas"
-      v-model="prop.selectedIdiomaInput"
-      v-if="prop.selectedIdiomaInput !== undefined && prop.selectedIdiomaInput !== ''"
-    ></v-combobox>
-    <v-combobox
-      clearable
-      label="Idioma"
-      :items="idiomas"
-      v-model="selectedIdioma"
-      v-else
+      v-model="IdiomaSeleccionado"
     ></v-combobox>
 
   <v-form class="w-85 content-margin">
@@ -21,7 +13,7 @@
           label="Ingrese el texto aquí"
           variant="outlined"
           hide-details
-          v-model="selectedText"
+          v-model="textoEntrada"
           no-resize
           rows="20"
       >
@@ -34,22 +26,32 @@ import { ref,watch, defineProps, defineEmits  } from "vue";
 import idiomas from "../../public/idiomas.json";
 
 const prop = defineProps({
-  selectedIdiomaInput: {type:String, required:false}
+  idiomaEntradaSeleccionado: {type:String, required:false}
 });
 
 const emit = defineEmits({
-  onChangeIdioma: String
+  onChangeIdioma: String,
+  onChangeTexto: String
 });
 
 const model='rounded-xl';
 
-const selectedIdioma=ref(prop.selectedIdiomaInput);
+const IdiomaSeleccionado=ref(prop.idiomaEntradaSeleccionado);
 
-const selectedText=ref('');
+const textoEntrada=ref('');
 
-watch(selectedIdioma, (newIdioma) => {
-  emit('onChangeIdioma', newIdioma);
+watch(textoEntrada, (nuevoTexto) => {
+  emit('onChangeTexto', nuevoTexto);
 })
+
+watch(IdiomaSeleccionado, (nuevoIdioma) => {
+  emit('onChangeIdioma', nuevoIdioma);
+})
+
+watch(() => prop.idiomaEntradaSeleccionado, (nuevoValor) => {
+  IdiomaSeleccionado.value=nuevoValor;
+});
+
 </script>
 
 <style>
