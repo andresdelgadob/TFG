@@ -4,11 +4,12 @@
       label="Idioma"
       :items="idiomas"
       v-model="IdiomaSeleccionado"
+      rounded="t-xl"
+      :class="{ 'error--text': campoObligatorio}"
     ></v-combobox>
 
-  <v-form class="w-85 content-margin">
+  <v-form class="mx-5">
       <v-textarea 
-          :class="model"
           clearable
           label="Ingrese el texto aquí"
           variant="outlined"
@@ -34,8 +35,6 @@ const emit = defineEmits({
   onChangeTexto: String
 });
 
-const model='rounded-xl';
-
 const IdiomaSeleccionado=ref(prop.idiomaEntradaSeleccionado);
 
 const textoEntrada=ref('');
@@ -55,7 +54,4 @@ watch(() => prop.idiomaEntradaSeleccionado, (nuevoValor) => {
 </script>
 
 <style>
-.content-margin {
-  margin: 20px;
-}
 </style>

@@ -6,12 +6,13 @@ import { createVuetify } from 'vuetify';
 import { mdiAccount } from '@mdi/js';
 import 'vuetify/styles';
 import '@mdi/font/css/materialdesignicons.css';
-import "vuetify/styles";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import { fa } from "vuetify/iconsets/fa";
 import { aliases, mdi } from "vuetify/lib/iconsets/mdi";
 import { loadFonts } from './plugins/webfontloader'
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
 
 loadFonts()
 
@@ -35,6 +36,8 @@ const vuetify = createVuetify({
     directives,
   })
 app.use(vuetify);
+
+app.config.globalProperties.$vuetify = vuetify.framework;
 app.config.globalProperties.$mdiAccount = mdiAccount;
 
 app.mount('#app');
