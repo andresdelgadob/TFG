@@ -1,0 +1,10 @@
+{
+  "source_language": "idiomaEntrada",
+  "target_language": "idiomaSalida",
+  "text": "textoEntrada",
+  "instructions": [
+    "Proporciona una traducción precisa y coherente.",
+    "Mantén el tono y el estilo del texto original en la traducción."
+  ],
+  "response": "(Indica el texto de respuesta traducido)"
+} 
