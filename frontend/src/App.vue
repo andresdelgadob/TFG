@@ -46,8 +46,8 @@
                     </v-row>
                     <v-row justify="center" style="margin-top: 180px;">
                         <v-btn @click="configuracion = true" color="info" rounded="xl" size="x-small" prepend-icon="mdi-cog" stacked></v-btn>
-                        <v-dialog v-model="configuracion" width="500" height="400">
-                            <v-card  :class="model" :height="650" :width="500">
+                        <v-dialog v-model="configuracion" :height="300" :width="500">
+                            <v-card  :class="model" :height="300" :width="500">
                                 <v-container>
                                     <v-row class="mb-0">
                                         <v-col>
@@ -61,9 +61,8 @@
                                     </v-row>
                                     <v-row>
                                         <v-card-text class="pt-0">
-                                            <v-checkbox label="Resumir y traducir"></v-checkbox>
-                                            <v-checkbox label="Traducir formalmente"></v-checkbox>
-                                            <v-checkbox label="Eliminar contenido explícito"></v-checkbox>
+                                            <v-checkbox v-model="formal" label="Traducir formalmente"></v-checkbox>
+                                            <v-checkbox v-model="formato" label="Mantener formato"></v-checkbox>
                                         </v-card-text>
                                     </v-row>
                                 </v-container>
@@ -100,6 +99,8 @@ const textoSalida= ref('');
 const configuracion = ref(false);
 const cargando = ref(false);
 const error= ref('');
+const formal = ref(false);
+const formato = ref(false);
 
 const intercambiarIdiomas = () => {
   const temp = idiomaEntradaSeleccionado.value;
@@ -115,12 +116,12 @@ const traducir = () => {
     cargando.value=true;
     
     if ((!idiomaSalidaSeleccionado.value || idiomaSalidaSeleccionado.value === '')) {
-        if(!error.value)  mostrarAlertaError('El idioma de salida está vacío. Por favor, seleccione un idioma de salida válido.');
+        if(!error.value)  mostrarAlertaError('Error: El idioma de salida está vacío. Por favor, seleccione un idioma de salida válido.');
         cargando.value = false;
         return;
     }
 
-    fetch('http://localhost:8001/public.php', {
+    fetch('http://localhost:8003/public.php', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json', // Tipo de contenido del cuerpo (JSON en este caso)
@@ -128,22 +129,27 @@ const traducir = () => {
         body: JSON.stringify({
             "texto":textoEntrada.value,
             "idiomaEntrada":idiomaEntradaSeleccionado.value,
-            "idiomaSalida":idiomaSalidaSeleccionado.value
+            "idiomaSalida":idiomaSalidaSeleccionado.value,
+            "opciones":{
+                "formal":formal.value,
+                "formato":formato.value
+            }
         }),})
     .then(response => {
         cargando.value=false;
         if (!response.ok) {
-        throw new Error('Error en la solicitud')
+            return response.json().then(error => {
+                throw new Error(error);
+            });
         }
         return response.json(); 
     })
     .then(data => {
         textoSalida.value=data;
-        console.log(data);
     })
     .catch(error => {
         cargando.value=false;
-        console.error(error);
+        mostrarAlertaError(error);
     });
 };
 
