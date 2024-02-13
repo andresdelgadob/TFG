@@ -17,7 +17,7 @@
           hide-details
           v-model="textoSalida"
           no-resize
-          rows="20"
+          :rows="calcularFilas"
           readonly
       >
       </v-textarea>
@@ -32,8 +32,10 @@
 </style>
 
 <script setup>
-import { ref,watch,defineProps  } from "vue";
+import { ref,watch,defineProps,computed  } from "vue";
 import idiomas from "../../public/idiomas.json";
+import vuetify from '../plugins/vuetify';
+import { mdiConsoleLine } from "@mdi/js";
 
 const prop = defineProps({
   idiomaSalidaSeleccionado: {type:String, required:false},
@@ -65,6 +67,17 @@ watch(() => prop.idiomaSalidaSeleccionado, (nuevoValor) => {
 watch(() => prop.textoSalida, (nuevoValor) => {
   textoSalida.value=nuevoValor;
 });
+
+const calcularFilas = computed(() => {
+  if (vuetify.display.xlAndUp.value) {
+    return 30;
+  } else if (vuetify.display.lg.value) {
+    return 17;
+  }else if(vuetify.display.mdAndDown.value){
+    return 5;
+  }
+});
+
 </script>
 
 <style>

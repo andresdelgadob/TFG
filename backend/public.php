@@ -2,9 +2,15 @@
 
 // Cabecera de la llamada
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
+// Permitir preflight request
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+// Comprobar si la llamada es un POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Datos de la llamada
