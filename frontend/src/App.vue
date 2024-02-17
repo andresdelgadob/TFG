@@ -28,9 +28,9 @@
 
         <v-container class="content-container">
             <!-- Primer v-sheet a la izquierda -->
-            <v-row v-if="vuetify.display.xlAndUp.value">
+            <v-row v-if="vuetify.display.lgAndUp.value">
                 <v-col xl="5">
-                    <v-sheet :class="model" width="100%" style="min-width: 710px;min-height: 850px;" color="info">
+                    <v-sheet :class="model" width="100%" :height="alturaResolucion" style="min-width: 480px; margin-top: 20px;" color="info">
                         <!-- Contenido del primer v-sheet -->
                         <Input :idiomaEntradaSeleccionado="idiomaEntradaSeleccionado" @onChangeIdioma="idiomaEntradaSeleccionado = $event"
                         @onChangeTexto="textoEntrada = $event"/>
@@ -38,14 +38,14 @@
                 </v-col>
 
                 <v-col xl="2">
-                    <v-row justify="center" style="height: 45%; margin-top: 5px;">
-                        <v-btn color="info" rounded="xl" prepend-icon="mdi-arrow-left-right-bold" stacked @click="intercambiarIdiomas"></v-btn>
-                    </v-row>
-                    <v-row justify="center" style="height: 45%;">
-                        <v-btn @click="traducir" color="info" rounded="xl" size="x-large" prepend-icon="mdi-arrow-right-bold" stacked>Traducir</v-btn>
+                    <v-row justify="center" style="height: 40%; margin-top: 20px;">
+                        <v-btn color="info" rounded="xl" :size="tamañoBotonesResolucion" prepend-icon="mdi-arrow-left-right-bold" stacked @click="intercambiarIdiomas"></v-btn>
                     </v-row>
                     <v-row justify="center" style="height: 40%;">
-                        <v-btn @click="configuracion = true" color="info" rounded="xl" prepend-icon="mdi-cog" stacked></v-btn>
+                        <v-btn @click="traducir" color="info" rounded="xl" :size="tamañoBotonTraducirResolucion" prepend-icon="mdi-arrow-right-bold" stacked>Traducir</v-btn>
+                    </v-row>
+                    <v-row justify="center" style="height: 40%;">
+                        <v-btn @click="configuracion = true" color="info" rounded="xl" :size="tamañoBotonesResolucion" prepend-icon="mdi-cog" stacked></v-btn>
                         <v-dialog v-model="configuracion" :height="300" :width="500">
                             <v-card  :class="model" :height="300" :width="500">
                                 <v-container>
@@ -61,8 +61,8 @@
                                     </v-row>
                                     <v-row>
                                         <v-card-text class="pt-0">
-                                            <v-checkbox v-model="formal" label="Traducir formalmente"></v-checkbox>
-                                            <v-checkbox v-model="formato" label="Mantener formato"></v-checkbox>
+                                            <v-switch color="info" v-model="formal" label="Traducir formalmente"></v-switch>
+                                            <v-switch color="info" v-model="formato" label="Mantener formato"></v-switch>
                                         </v-card-text>
                                     </v-row>
                                 </v-container>
@@ -73,61 +73,7 @@
 
                 <v-col xl="5">
                     <!-- Segundo v-sheet a la derecha -->
-                    <v-sheet :class="model" color="info" width="100%" style="position: relative;min-width: 710px;min-height: 850px;">
-                        <!-- Contenido del segundo v-sheet -->
-                            <v-progress-circular v-if="cargando" indeterminate style="z-index: 1; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"></v-progress-circular>
-                            <Output :idiomaSalidaSeleccionado="idiomaSalidaSeleccionado" @onChangeIdioma="idiomaSalidaSeleccionado = $event"
-                                :textoSalida="textoSalida"/>
-                    </v-sheet>
-                </v-col>
-            </v-row>
-
-            <v-row v-if="vuetify.display.lg.value">
-                <v-col lg="5">
-                    <v-sheet :class="model" width="100%" height=550px style="min-width: 480px;" color="info">
-                        <!-- Contenido del primer v-sheet -->
-                        <Input :idiomaEntradaSeleccionado="idiomaEntradaSeleccionado" @onChangeIdioma="idiomaEntradaSeleccionado = $event"
-                        @onChangeTexto="textoEntrada = $event"/>
-                    </v-sheet>
-                </v-col>
-
-                <v-col lg="2">
-                    <v-row justify="center" style="height: 40%;margin-top:5px;">
-                        <v-btn color="info" rounded="xl" size="x-small" prepend-icon="mdi-arrow-left-right-bold" stacked @click="intercambiarIdiomas"></v-btn>
-                    </v-row>
-                    <v-row justify="center" style="height: 45%;">
-                        <v-btn @click="traducir" color="info" rounded="xl" prepend-icon="mdi-arrow-right-bold" stacked>Traducir</v-btn>
-                    </v-row>
-                    <v-row justify="center" style="height: 40%;">
-                        <v-btn @click="configuracion = true" color="info" rounded="xl" size="x-small" prepend-icon="mdi-cog" stacked></v-btn>
-                        <v-dialog v-model="configuracion" :height="300" :width="500">
-                            <v-card  :class="model" :height="300" :width="500">
-                                <v-container>
-                                    <v-row class="mb-0">
-                                        <v-col>
-                                            <v-card-title class="pa-6">Configuración</v-card-title>
-                                        </v-col>
-                                        <v-col style="margin-left: 180px;">
-                                            <v-card-actions class="d-flex pa-4">
-                                                <v-btn @click="configuracion = false" icon="mdi-close-circle"></v-btn>
-                                            </v-card-actions>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-card-text class="pt-0">
-                                            <v-checkbox v-model="formal" label="Traducir formalmente"></v-checkbox>
-                                            <v-checkbox v-model="formato" label="Mantener formato"></v-checkbox>
-                                        </v-card-text>
-                                    </v-row>
-                                </v-container>
-                            </v-card>
-                        </v-dialog>           
-                    </v-row>
-                </v-col>
-
-                <v-col lg="5">
-                    <!-- Segundo v-sheet a la derecha -->
-                    <v-sheet :class="model" color="info" width="100%" height=550px style="position: relative;min-width: 480px;">
+                    <v-sheet :class="model" color="info" width="100%" :height="alturaResolucion" style="position: relative; min-width: 480px; margin-top: 20px;">
                         <!-- Contenido del segundo v-sheet -->
                             <v-progress-circular v-if="cargando" indeterminate style="z-index: 1; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"></v-progress-circular>
                             <Output :idiomaSalidaSeleccionado="idiomaSalidaSeleccionado" @onChangeIdioma="idiomaSalidaSeleccionado = $event"
@@ -138,7 +84,7 @@
 
             <v-col v-if="vuetify.display.mdAndDown.value">
                 <v-row>
-                    <v-sheet :class="model" width="100%" height=250px style="position: relative;min-width: 310px;" color="info">
+                    <v-sheet :class="model" width="100%" height=270px style="position: relative;min-width: 220px;margin-top: 20px;" color="info">
                         <!-- Contenido del primer v-sheet -->
                         <Input :idiomaEntradaSeleccionado="idiomaEntradaSeleccionado" @onChangeIdioma="idiomaEntradaSeleccionado = $event"
                         @onChangeTexto="textoEntrada = $event"/>
@@ -149,14 +95,14 @@
                         <v-btn style="text-align: right; margin-right: auto; margin-top: 18px;" color="info" rounded="xl" size="x-small" prepend-icon="mdi-arrow-left-right-bold" stacked @click="intercambiarIdiomas"></v-btn>
                         <v-btn style="margin-bottom: 10px; margin-top: 10px;" @click="traducir" color="info" rounded="xl" prepend-icon="mdi-arrow-right-bold" stacked>Traducir</v-btn>
                         <v-btn style="text-align: left; margin-left: auto; margin-top: 18px;" @click="configuracion = true" color="info" rounded="xl" size="x-small" prepend-icon="mdi-cog" stacked></v-btn>
-                        <v-dialog v-model="configuracion" :height="300" :width="500">
-                            <v-card  :class="model" :height="300" :width="500">
+                        <v-dialog v-model="configuracion" :height="300" :width="400">
+                            <v-card  :class="model" :height="300" :width="400">
                                 <v-container>
                                     <v-row class="mb-0">
                                         <v-col>
                                             <v-card-title class="pa-6">Configuración</v-card-title>
                                         </v-col>
-                                        <v-col style="margin-left: 180px;">
+                                        <v-col style="margin-left: 80px;">
                                             <v-card-actions class="d-flex pa-4">
                                                 <v-btn @click="configuracion = false" icon="mdi-close-circle"></v-btn>
                                             </v-card-actions>
@@ -164,8 +110,8 @@
                                     </v-row>
                                     <v-row>
                                         <v-card-text class="pt-0">
-                                            <v-checkbox v-model="formal" label="Traducir formalmente"></v-checkbox>
-                                            <v-checkbox v-model="formato" label="Mantener formato"></v-checkbox>
+                                            <v-switch color="info" v-model="formal" label="Traducir formalmente"></v-switch>
+                                            <v-switch color="info" v-model="formato" label="Mantener formato"></v-switch>
                                         </v-card-text>
                                     </v-row>
                                 </v-container>
@@ -175,7 +121,7 @@
 
                 <v-row >
                     <!-- Segundo v-sheet a la derecha -->
-                    <v-sheet :class="model" color="info" width="100%" height=250px style="position: relative;min-width: 310px;">
+                    <v-sheet :class="model" color="info" width="100%" height=270px style="position: relative;min-width: 220px;">
                         <!-- Contenido del segundo v-sheet -->
                             <v-progress-circular v-if="cargando" indeterminate style="z-index: 1; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"></v-progress-circular>
                             <Output :idiomaSalidaSeleccionado="idiomaSalidaSeleccionado" @onChangeIdioma="idiomaSalidaSeleccionado = $event"
@@ -188,11 +134,11 @@
 </template>  
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import Input from "./components/Input.vue";
 import Output from "./components/Output.vue";
 import vuetify from './plugins/vuetify'
-console.log(vuetify.display);
+
 const model='rounded-xl';
 const idiomaEntradaSeleccionado= ref('');
 const idiomaSalidaSeleccionado= ref('');
@@ -259,6 +205,30 @@ const mostrarAlertaError = (mensaje) => {
     error.value = mensaje;
     setTimeout(clearError, 4000);
 };
+
+const alturaResolucion = computed(() => {
+  if (vuetify.display.xlAndUp.value) {
+    return "650px";
+  } else if (vuetify.display.lg.value) {
+    return "530px";
+  }
+});
+
+const tamañoBotonesResolucion = computed(() => {
+  if (vuetify.display.xlAndUp.value) {
+    return "small";
+  } else if (vuetify.display.lg.value) {
+    return "x-small";
+  }
+});
+
+const tamañoBotonTraducirResolucion = computed(() => {
+  if (vuetify.display.xlAndUp.value) {
+    return "x-large";
+  } else if (vuetify.display.lg.value) {
+    return "large";
+  }
+});
 </script>
 
 <style>

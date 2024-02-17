@@ -40,6 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idiomaSalida = buscarClavePorPalabra($postData['idiomaSalida'],$idiomasArray);
     $formal=$postData['opciones']['formal']??false;
     $formato=$postData['opciones']['formato']??false;
+    $formalBBDD=$postData['opciones']['formal']?1:0;
+    $formatoBBDD=$postData['opciones']['formato']?1:0;
 
     // Información de la base de datos
     $host = 'localhost';
@@ -53,16 +55,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn = new PDO("pgsql:host=$host;dbname=$dbname;port=$port", $user, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Número de palabras a traducir
+        // Número de caracteres a traducir
         $numCaracteres = strlen($textoEntrada)??0;  
 
-        // Número de palabras total traduccidas
-        $query = "SELECT SUM(num_palabras) as total_palabras FROM traducciones";
+        // Número de caracteres total traduccidas
+        $query = "SELECT SUM(num_caracteres) as total_caracteres FROM traducciones";
         $result = $conn->query($query);
         $row = $result->fetch(PDO::FETCH_ASSOC);
         $totalCaracteres = $row['total_palabras']+$numCaracteres;
 
-        // Comprobación de límite de traducción de palabras mensual
+        // Comprobación de límite de traducción de caracteres mensual
         if($totalCaracteres>=450000){
             throw new Exception("Número máximo de traducciones mensual alcanzaddo");
         }else{
@@ -116,8 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             curl_close($ch);
 
             // Insercción en la base de datos
-            $insert = $conn->prepare("INSERT INTO traducciones (idioma_entrada, idioma_salida, texto, traduccion, num_palabras) VALUES (?, ?, ?, ?, ?)");
-            $insert->execute([$idiomaEntrada, $idiomaSalida, $textoEntrada, $textoTraducido, $numCaracteres]);
+            $insert = $conn->prepare("INSERT INTO traducciones (idioma_entrada, idioma_salida, texto, traduccion, num_caracteres, formal, formato) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $insert->execute([$idiomaEntrada, $idiomaSalida, $textoEntrada, $textoTraducido, $numCaracteres, $formalBBDD, $formatoBBDD]);
         }
         //Respuesta con el texto traducido
         echo json_encode($textoTraducido);

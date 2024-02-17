@@ -11,7 +11,6 @@
     <v-form class="mx-5">
       <v-textarea 
           :class="model"
-          clearable
           label="Traducción"
           variant="outlined"
           hide-details
@@ -21,6 +20,10 @@
           readonly
       >
       </v-textarea>
+
+      <v-btn  rounded="xl" size="small" style="text-align: center;margin-top: 5px;" @click="leerTexto" :disabled="!textoSalida">
+          <v-icon left>mdi-volume-high</v-icon>
+        </v-btn>
   </v-form>
 </template>
 
@@ -34,6 +37,7 @@
 <script setup>
 import { ref,watch,defineProps,computed  } from "vue";
 import idiomas from "../../public/idiomas.json";
+import idiomasClave from "../../public/idiomasClave.json";
 import vuetify from '../plugins/vuetify';
 import { mdiConsoleLine } from "@mdi/js";
 
@@ -70,13 +74,23 @@ watch(() => prop.textoSalida, (nuevoValor) => {
 
 const calcularFilas = computed(() => {
   if (vuetify.display.xlAndUp.value) {
-    return 30;
+    return 21;
   } else if (vuetify.display.lg.value) {
-    return 17;
+    return 16;
   }else if(vuetify.display.mdAndDown.value){
     return 5;
   }
 });
+
+const leerTexto = () => {
+  const synthesis = window.speechSynthesis;
+
+  const message = new SpeechSynthesisUtterance(textoSalida.value);
+
+  message.lang = idiomasClave[IdiomaSeleccionado.value];
+
+  synthesis.speak(message);
+};
 
 </script>
 
