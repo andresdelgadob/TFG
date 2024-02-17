@@ -10,11 +10,11 @@
 
   <v-row>
     <v-col :cols="tamañoResolucion"><v-btn rounded="xl" size="small" style="margin-left: 15px;margin-top: 5px;" @click="recogerTextoVoz"
-      :disabled="!reconocimientoDisponible"><v-icon left>mdi-microphone</v-icon></v-btn>
+      :disabled="!reconocimientoDisponible"><v-icon>{{ reconocimientoVoz ? 'mdi-record' : 'mdi-microphone' }}</v-icon></v-btn>
     </v-col>
     <v-col>
       <v-btn  rounded="xl" size="small" :style="estiloBotonResolucion" @click="leerTexto" :disabled="!textoEntrada">
-          <v-icon left>mdi-volume-high</v-icon>
+          <v-icon>{{ lectura ? 'mdi-stop' : 'mdi-volume-high' }} </v-icon>
         </v-btn>
     </v-col>
     <v-col>
@@ -44,6 +44,10 @@ const IdiomaSeleccionado = ref(prop.idiomaEntradaSeleccionado);
 const textoEntrada = ref('');
 
 const reconocimientoDisponible = ref(false);
+
+const reconocimientoVoz = ref(null);
+
+const lectura = ref(false);
 
 if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
   reconocimientoDisponible.value = true;
@@ -82,28 +86,47 @@ const contarPalabras = function () {
 };
 
 const recogerTextoVoz = () => {
-  const reconocimientoVoz = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  if (!reconocimientoVoz.value) { 
+    reconocimientoVoz.value = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    reconocimientoVoz.value.interimResults = true;
+    reconocimientoVoz.value.continious = true;
+    reconocimientoVoz.value.start();
 
-  reconocimientoVoz.start();
+    let textoAntiguo=textoEntrada.value;
 
-  reconocimientoVoz.onresult = (event) => {
-    const resultado = event.results[0][0].transcript;
-    textoEntrada.value += resultado;
+    reconocimientoVoz.value.onresult = (event) => {
+      let resultado = '';
+
+      for (let i = 0; i < event.results.length; i++) {
+        resultado += event.results[i][0].transcript + ' ';
+      }
+
+      textoEntrada.value = textoAntiguo+resultado;
+    }
   };
 
-  reconocimientoVoz.onerror = (event) => {
-    console.error('Error en el reconocimiento de voz:', event.error);
-  };
+  reconocimientoVoz.value.onend = () => {
+      reconocimientoVoz.value.stop();
+      reconocimientoVoz.value = null;
+    };
 };
 
 const leerTexto = () => {
   const synthesis = window.speechSynthesis;
+  if(lectura.value===false){
+    const message = new SpeechSynthesisUtterance(textoEntrada.value);
 
-  const message = new SpeechSynthesisUtterance(textoEntrada.value);
+    message.lang = idiomasClave[IdiomaSeleccionado.value];
 
-  message.lang = idiomasClave[IdiomaSeleccionado.value];
+    synthesis.speak(message);
 
-  synthesis.speak(message);
+    lectura.value=true;
+  }else{
+    synthesis.cancel();
+
+    lectura.value=false;
+  }
+  
 };
 
 const estiloBotonResolucion = computed(() => {

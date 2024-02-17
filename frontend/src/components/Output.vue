@@ -22,7 +22,7 @@
       </v-textarea>
 
       <v-btn  rounded="xl" size="small" style="text-align: center;margin-top: 5px;" @click="leerTexto" :disabled="!textoSalida">
-          <v-icon left>mdi-volume-high</v-icon>
+          <v-icon left>{{ lectura ? 'mdi-stop' : 'mdi-volume-high' }}</v-icon>
         </v-btn>
   </v-form>
 </template>
@@ -59,6 +59,8 @@ const textoSalida=ref(prop.textoSalida);
 
 const campoObligatorio = ref(false);
 
+const lectura = ref(false);
+
 watch(IdiomaSeleccionado, (nuevoIdioma) => {
   campoObligatorio.value=!nuevoIdioma;
   emit('onChangeIdioma', nuevoIdioma);
@@ -84,12 +86,20 @@ const calcularFilas = computed(() => {
 
 const leerTexto = () => {
   const synthesis = window.speechSynthesis;
+  if(lectura.value===false){
+    const message = new SpeechSynthesisUtterance(textoSalida.value);
 
-  const message = new SpeechSynthesisUtterance(textoSalida.value);
+    message.lang = idiomasClave[IdiomaSeleccionado.value];
 
-  message.lang = idiomasClave[IdiomaSeleccionado.value];
+    synthesis.speak(message);
 
-  synthesis.speak(message);
+    lectura.value=true;
+  }else{
+    synthesis.cancel();
+
+    lectura.value=false;
+  }
+  
 };
 
 </script>
