@@ -94,6 +94,10 @@ const leerTexto = () => {
     synthesis.speak(message);
 
     lectura.value=true;
+    lectura.value=true;
+    message.onend = () => {
+      lectura.value = false;
+    };
   }else{
     synthesis.cancel();
 
