@@ -1,5 +1,16 @@
 # frontend
 
+# Primeros pasos (Para Linux)
+sudo apt-get install -y nodejs
+
+npm install -g @vue/cli
+
+vue create my-vue-project
+
+npm install vuetify
+
+npm install @mdi/font
+
 ## Project setup
 ```
 npm install
