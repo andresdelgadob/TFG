@@ -4,7 +4,7 @@
 
   <v-form class="mx-5">
     <v-textarea clearable label="Ingrese el texto aquí" variant="outlined" hide-details v-model="textoEntrada" no-resize
-      :rows="calcularFilas" :readonly="contarPalabras() > 500">
+      :rows="calcularFilas" :readonly="contarPalabras() > 2500">
     </v-textarea>
   </v-form>
 
@@ -18,7 +18,7 @@
         </v-btn>
     </v-col>
     <v-col>
-      <p style="text-align: right; margin-right: 20px;margin-top: 5px;">{{ contarPalabras(textoEntrada) }}/500</p>
+      <p style="text-align: right; margin-right: 20px;margin-top: 5px;">{{ contarPalabras(textoEntrada) }}/2500</p>
     </v-col>
 
   </v-row>
@@ -79,10 +79,10 @@ const contarPalabras = function () {
   if (!textoEntrada.value) {
     return 0;
   }
-  if (textoEntrada.value.trim().split(/\s+/).length > 500) {
-    textoEntrada.value = textoEntrada.value.trim().split(/\s+/).slice(0, 500).join(' ');
+  if (textoEntrada.value.length > 2500) {
+    textoEntrada.value = textoEntrada.value.slice(0, 2500);
   }
-  return textoEntrada.value.trim().split(/\s+/).length;
+  return textoEntrada.value.length;
 };
 
 const recogerTextoVoz = () => {
