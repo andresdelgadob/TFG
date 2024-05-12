@@ -43,6 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $formalBBDD=$postData['opciones']['formal']?1:0;
     $formatoBBDD=$postData['opciones']['formato']?1:0;
 
+    // Si el idioma de salida es default mostrar error
+    if($idiomaSalida=='default'){
+        echo json_encode("Idioma de salida incorrecto");
+        http_response_code(400);
+        exit();
+    } 
+
     // Información de la base de datos
     $host = 'localhost';
     $dbname = 'postgres';
