@@ -67,23 +67,51 @@
                     </v-row>
                     <v-row justify="center" style="height: 40%;">
                         <v-btn @click="configuracion = true" color="info" rounded="xl" :size="tamañoBotonesResolucion" prepend-icon="mdi-cog" stacked></v-btn>
-                        <v-dialog v-model="configuracion" :height="300" :width="500">
-                            <v-card  :class="model" :height="300" :width="500">
+                        <v-dialog v-model="configuracion" :height="320" :width="480">
+                            <v-card  :class="model" :height="320" :width="480">
                                 <v-container>
                                     <v-row class="mb-0">
                                         <v-col>
                                             <v-card-title class="pa-6">Configuración</v-card-title>
                                         </v-col>
-                                        <v-col style="margin-left: 180px;">
-                                            <v-card-actions class="d-flex pa-4">
+                                        <v-col style="margin-left: 160px;">
+                                            <v-card-actions class="d-flex pa-0 mt-4">
                                                 <v-btn @click="configuracion = false" icon="mdi-close-circle"></v-btn>
                                             </v-card-actions>
                                         </v-col>
                                     </v-row>
                                     <v-row>
                                         <v-card-text class="pt-0">
-                                            <v-switch color="info" v-model="formal" label="Traducir formalmente (El texto de traducido aumentará en medida de lo posible la formalidad respecto al original)"></v-switch>
-                                            <v-switch color="info" v-model="formato" label="Mantener formato (El texto traducido mantendrá el mismo formato al original)"></v-switch>
+                                            <v-row class="d-flex align-center ml-5">
+                                                <v-col cols="auto" class="d-flex align-center pa-0">
+                                                    <v-switch color="info" v-model="formal" label="Traducir formalmente"></v-switch>
+                                                </v-col>
+                                                <v-col cols="auto" class="d-flex align-center mb-6 pa-0">
+                                                    <v-tooltip bottom>
+                                                        <template v-slot:activator="{ props }">
+                                                        <v-btn icon variant="text" v-bind="props" v-on="on">
+                                                            <v-icon>mdi-information</v-icon>
+                                                        </v-btn>
+                                                        </template>
+                                                        <span>El texto traducido aumentará en medida de lo posible la formalidad respecto al original</span>
+                                                    </v-tooltip>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row class="d-flex align-center ml-5">
+                                                <v-col cols="auto" class="d-flex align-center pa-0">
+                                                    <v-switch color="info" v-model="formato" label="Mantener formato"></v-switch>
+                                                </v-col>
+                                                <v-col cols="auto" class="d-flex align-center mb-6 pa-0">
+                                                    <v-tooltip bottom>
+                                                        <template v-slot:activator="{ props }">
+                                                        <v-btn icon variant="text" v-bind="props" v-on="on">
+                                                            <v-icon>mdi-information</v-icon>
+                                                        </v-btn>
+                                                        </template>
+                                                        <span>El texto traducido mantendrá el mismo formato al original</span>
+                                                    </v-tooltip>
+                                                </v-col>
+                                            </v-row>
                                         </v-card-text>
                                     </v-row>
                                 </v-container>
@@ -161,14 +189,14 @@
                         <v-btn style="text-align: right; margin-right: auto; margin-top: 18px;" color="info" rounded="xl" size="x-small" prepend-icon="mdi-arrow-left-right-bold" stacked @click="intercambiarIdiomas"></v-btn>
                         <v-btn style="margin-bottom: 10px; margin-top: 10px;" @click="traducir" color="info" rounded="xl" prepend-icon="mdi-arrow-right-bold" stacked>Traducir</v-btn>
                         <v-btn style="text-align: left; margin-left: auto; margin-top: 18px;" @click="configuracion = true" color="info" rounded="xl" size="x-small" prepend-icon="mdi-cog" stacked></v-btn>
-                        <v-dialog v-model="configuracion" :height="300" :width="400">
-                            <v-card  :class="model" :height="300" :width="400">
+                        <v-dialog v-model="configuracion" :height="300" :width="320">
+                            <v-card  :class="model" :height="300" :width="320">
                                 <v-container>
                                     <v-row class="mb-0">
-                                        <v-col>
-                                            <v-card-title class="pa-6">Configuración</v-card-title>
+                                        <v-col cols="8" class="d-flex align-center">
+                                            <v-card-title class="pa-0">Configuración</v-card-title>
                                         </v-col>
-                                        <v-col style="margin-left: 80px;">
+                                        <v-col cols="4">
                                             <v-card-actions class="d-flex pa-4">
                                                 <v-btn @click="configuracion = false" icon="mdi-close-circle"></v-btn>
                                             </v-card-actions>
@@ -176,8 +204,36 @@
                                     </v-row>
                                     <v-row>
                                         <v-card-text class="pt-0">
-                                            <v-switch color="info" v-model="formal" label="Traducir formalmente"></v-switch>
-                                            <v-switch color="info" v-model="formato" label="Mantener formato"></v-switch>
+                                            <v-row class="d-flex align-center ml-5">
+                                                <v-col cols="auto" class="d-flex align-center pa-0">
+                                                    <v-switch color="info" v-model="formal" label="Traducir formalmente"></v-switch>
+                                                </v-col>
+                                                <v-col cols="auto" class="d-flex align-center mb-6 pa-0">
+                                                    <v-tooltip bottom>
+                                                        <template v-slot:activator="{ props }">
+                                                        <v-btn icon variant="text" v-bind="props" v-on="on">
+                                                            <v-icon>mdi-information</v-icon>
+                                                        </v-btn>
+                                                        </template>
+                                                        <span>El texto traducido aumentará en medida de lo posible la formalidad respecto al original</span>
+                                                    </v-tooltip>
+                                                </v-col>
+                                            </v-row>
+                                            <v-row class="d-flex align-center ml-5">
+                                                <v-col cols="auto" class="d-flex align-center pa-0">
+                                                    <v-switch color="info" v-model="formato" label="Mantener formato"></v-switch>
+                                                </v-col>
+                                                <v-col cols="auto" class="d-flex align-center mb-6 pa-0">
+                                                    <v-tooltip bottom>
+                                                        <template v-slot:activator="{ props }">
+                                                        <v-btn icon variant="text" v-bind="props" v-on="on">
+                                                            <v-icon>mdi-information</v-icon>
+                                                        </v-btn>
+                                                        </template>
+                                                        <span>El texto traducido mantendrá el mismo formato al original</span>
+                                                    </v-tooltip>
+                                                </v-col>
+                                            </v-row>
                                         </v-card-text>
                                     </v-row>
                                 </v-container>
