@@ -20,7 +20,7 @@
 
         <v-app-bar color="primary">
             <div class="d-flex align-center">
-                <v-img contain height="100px" width="200px" src="/logo uah blanco.png"></v-img>
+                <v-img contain height="100px" width="200px" src="logo uah blanco.png"></v-img>
                 <v-divider vertical ></v-divider>
                 <span class="mx-4" style="font-size: 24px;">IA Traductor</span>
             </div>
@@ -282,8 +282,8 @@
 <script setup>
 import { ref, computed } from "vue";
 import vuetify from './plugins/vuetify'
-import idiomas from "../public/idiomas.json";
-import idiomasClave from "../public/idiomasClave.json";
+import idiomas from './assets/idiomas.json';
+import idiomasClave from './assets/idiomasClave.json';
 
 const model='rounded-xl';
 const modelOutput='.rounded-t-xl';

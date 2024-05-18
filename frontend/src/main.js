@@ -11,7 +11,6 @@ import * as directives from "vuetify/directives";
 import { fa } from "vuetify/iconsets/fa";
 import { aliases, mdi } from "vuetify/lib/iconsets/mdi";
 import { loadFonts } from './plugins/webfontloader'
-import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 
 loadFonts()
