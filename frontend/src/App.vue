@@ -32,8 +32,29 @@
                 <v-col xl="5">
                     <v-sheet :class="model" width="100%" :height="alturaResolucion" style="min-width: 480px; margin-top: 20px;" color="info">
                         <!-- Contenido del primer v-sheet -->
-                        <Input :idiomaEntradaSeleccionado="idiomaEntradaSeleccionado" @onChangeIdioma="idiomaEntradaSeleccionado = $event"
-                        @onChangeTexto="textoEntrada = $event"/>
+                        <v-combobox clearable label="Idioma" :items="idiomas" v-model="idiomaEntradaSeleccionado" rounded="t-xl"
+                            :class="{ 'error--text': campoObligatorio }">
+                        </v-combobox>
+
+                        <v-form class="mx-5">
+                            <v-textarea clearable label="Ingrese el texto aquí" variant="outlined" hide-details v-model="textoEntrada" no-resize
+                            :rows="calcularFilas" :readonly="contarPalabras() > 2500">
+                            </v-textarea>
+                        </v-form>
+
+                        <v-row>
+                            <v-col :cols="tamañoResolucion"><v-btn rounded="xl" size="small" style="margin-left: 15px;margin-top: 5px;" @click="recogerTextoVoz"
+                            :disabled="!reconocimientoDisponible"><v-icon>{{ reconocimientoVoz ? 'mdi-record' : 'mdi-microphone' }}</v-icon></v-btn>
+                            </v-col>
+                            <v-col>
+                            <v-btn  rounded="xl" size="small" :style="estiloBotonResolucion" @click="leerTexto(idiomaEntradaSeleccionado,textoEntrada)" :disabled="!textoEntrada">
+                                <v-icon>{{ lectura ? 'mdi-stop' : 'mdi-volume-high' }} </v-icon>
+                                </v-btn>
+                            </v-col>
+                            <v-col>
+                            <p style="text-align: right; margin-right: 20px;margin-top: 5px;">{{ contarPalabras(textoEntrada) }}/2500</p>
+                            </v-col>
+                        </v-row>
                     </v-sheet>
                 </v-col>
 
@@ -61,8 +82,8 @@
                                     </v-row>
                                     <v-row>
                                         <v-card-text class="pt-0">
-                                            <v-switch color="info" v-model="formal" label="Traducir formalmente"></v-switch>
-                                            <v-switch color="info" v-model="formato" label="Mantener formato"></v-switch>
+                                            <v-switch color="info" v-model="formal" label="Traducir formalmente (El texto de traducido aumentará en medida de lo posible la formalidad respecto al original)"></v-switch>
+                                            <v-switch color="info" v-model="formato" label="Mantener formato (El texto traducido mantendrá el mismo formato al original)"></v-switch>
                                         </v-card-text>
                                     </v-row>
                                 </v-container>
@@ -76,8 +97,32 @@
                     <v-sheet :class="model" color="info" width="100%" :height="alturaResolucion" style="position: relative; min-width: 480px; margin-top: 20px;">
                         <!-- Contenido del segundo v-sheet -->
                             <v-progress-circular v-if="cargando" indeterminate style="z-index: 1; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"></v-progress-circular>
-                            <Output :idiomaSalidaSeleccionado="idiomaSalidaSeleccionado" @onChangeIdioma="idiomaSalidaSeleccionado = $event"
-                                :textoSalida="textoSalida"/>
+                            <v-combobox
+                                clearable
+                                label="Idioma*"
+                                :items="idiomas"
+                                v-model="idiomaSalidaSeleccionado"
+                                rounded="t-xl"
+                                :class="{ 'error--text': campoObligatorio}"
+                            ></v-combobox>
+
+                            <v-form class="mx-5">
+                                <v-textarea 
+                                    :class="modelOutput"
+                                    label="Traducción"
+                                    variant="outlined"
+                                    hide-details
+                                    v-model="textoSalida"
+                                    no-resize
+                                    :rows="calcularFilas"
+                                    readonly
+                                >
+                                </v-textarea>
+
+                            <v-btn  rounded="xl" size="small" style="text-align: center;margin-top: 5px;" @click="leerTexto(idiomaSalidaSeleccionado,textoSalida)" :disabled="!textoSalida">
+                                    <v-icon left>{{ lectura ? 'mdi-stop' : 'mdi-volume-high' }}</v-icon>
+                                    </v-btn>
+                            </v-form>
                     </v-sheet>
                 </v-col>
             </v-row>
@@ -86,8 +131,29 @@
                 <v-row>
                     <v-sheet :class="model" width="100%" height=270px style="position: relative;min-width: 220px;margin-top: 20px;" color="info">
                         <!-- Contenido del primer v-sheet -->
-                        <Input :idiomaEntradaSeleccionado="idiomaEntradaSeleccionado" @onChangeIdioma="idiomaEntradaSeleccionado = $event"
-                        @onChangeTexto="textoEntrada = $event"/>
+                        <v-combobox clearable label="Idioma" :items="idiomas" v-model="idiomaEntradaSeleccionado" rounded="t-xl"
+                            :class="{ 'error--text': campoObligatorio }">
+                        </v-combobox>
+
+                        <v-form class="mx-5">
+                            <v-textarea clearable label="Ingrese el texto aquí" variant="outlined" hide-details v-model="textoEntrada" no-resize
+                            :rows="calcularFilas" :readonly="contarPalabras() > 2500">
+                            </v-textarea>
+                        </v-form>
+
+                        <v-row>
+                            <v-col :cols="tamañoResolucion"><v-btn rounded="xl" size="small" style="margin-left: 15px;margin-top: 5px;" @click="recogerTextoVoz"
+                            :disabled="!reconocimientoDisponible"><v-icon>{{ reconocimientoVoz ? 'mdi-record' : 'mdi-microphone' }}</v-icon></v-btn>
+                            </v-col>
+                            <v-col>
+                            <v-btn  rounded="xl" size="small" :style="estiloBotonResolucion" @click="leerTexto(idiomaEntradaSeleccionado,textoEntrada)" :disabled="!textoEntrada">
+                                <v-icon>{{ lectura ? 'mdi-stop' : 'mdi-volume-high' }} </v-icon>
+                                </v-btn>
+                            </v-col>
+                            <v-col>
+                            <p style="text-align: right; margin-right: 20px;margin-top: 5px;">{{ contarPalabras(textoEntrada) }}/2500</p>
+                            </v-col>
+                        </v-row>
                     </v-sheet>
                 </v-row>
 
@@ -124,8 +190,32 @@
                     <v-sheet :class="model" color="info" width="100%" height=270px style="position: relative;min-width: 220px;">
                         <!-- Contenido del segundo v-sheet -->
                             <v-progress-circular v-if="cargando" indeterminate style="z-index: 1; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"></v-progress-circular>
-                            <Output :idiomaSalidaSeleccionado="idiomaSalidaSeleccionado" @onChangeIdioma="idiomaSalidaSeleccionado = $event"
-                                :textoSalida="textoSalida"/>
+                            <v-combobox
+                                clearable
+                                label="Idioma*"
+                                :items="idiomas"
+                                v-model="idiomaSalidaSeleccionado"
+                                rounded="t-xl"
+                                :class="{ 'error--text': campoObligatorio}"
+                            ></v-combobox>
+
+                            <v-form class="mx-5">
+                                <v-textarea 
+                                    :class="modelOutput"
+                                    label="Traducción"
+                                    variant="outlined"
+                                    hide-details
+                                    v-model="textoSalida"
+                                    no-resize
+                                    :rows="calcularFilas"
+                                    readonly
+                                >
+                                </v-textarea>
+
+                            <v-btn  rounded="xl" size="small" style="text-align: center;margin-top: 5px;" @click="leerTexto(idiomaSalidaSeleccionado,textoSalida)" :disabled="!textoSalida">
+                                    <v-icon left>{{ lectura ? 'mdi-stop' : 'mdi-volume-high' }}</v-icon>
+                                    </v-btn>
+                            </v-form>
                     </v-sheet>
                 </v-row>
             </v-col>
@@ -135,11 +225,12 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import Input from "./components/Input.vue";
-import Output from "./components/Output.vue";
 import vuetify from './plugins/vuetify'
+import idiomas from "../public/idiomas.json";
+import idiomasClave from "../public/idiomasClave.json";
 
 const model='rounded-xl';
+const modelOutput='.rounded-t-xl';
 const idiomaEntradaSeleccionado= ref('');
 const idiomaSalidaSeleccionado= ref('');
 const textoEntrada= ref('');
@@ -149,16 +240,13 @@ const cargando = ref(false);
 const error= ref('');
 const formal = ref(false);
 const formato = ref(false);
+const reconocimientoDisponible = ref(false);
+const reconocimientoVoz = ref(null);
+const lectura = ref(false);
 
-const intercambiarIdiomas = () => {
-  const temp = idiomaEntradaSeleccionado.value;
-  idiomaEntradaSeleccionado.value = idiomaSalidaSeleccionado.value;
-  idiomaSalidaSeleccionado.value = temp;
-};
-
-const clearError = () => {
-    error.value = null;
-};
+if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+  reconocimientoDisponible.value = true;
+}
 
 const traducir = () => {
     cargando.value=true;
@@ -201,10 +289,116 @@ const traducir = () => {
     });
 };
 
+const intercambiarIdiomas = () => {
+  const temp = idiomaEntradaSeleccionado.value;
+  idiomaEntradaSeleccionado.value = idiomaSalidaSeleccionado.value;
+  idiomaSalidaSeleccionado.value = temp;
+};
+
+const clearError = () => {
+    error.value = null;
+};
+
+const calcularFilas = computed(() => {
+  if (vuetify.display.xlAndUp.value) {
+    return 21;
+  } else if (vuetify.display.lg.value) {
+    return 16;
+  }else if(vuetify.display.mdAndDown.value){
+    return 5;
+  }
+});
+
 const mostrarAlertaError = (mensaje) => {
     error.value = mensaje;
     setTimeout(clearError, 4000);
 };
+
+const contarPalabras = function () {
+  if (!textoEntrada.value) {
+    return 0;
+  }
+  if (textoEntrada.value.length > 2500) {
+    textoEntrada.value = textoEntrada.value.slice(0, 2500);
+  }
+  return textoEntrada.value.length;
+};
+
+const recogerTextoVoz = () => {
+  if (!reconocimientoVoz.value) { 
+    reconocimientoVoz.value = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    reconocimientoVoz.value.interimResults = true;
+    reconocimientoVoz.value.continious = true;
+    reconocimientoVoz.value.start();
+
+    let textoAntiguo=textoEntrada.value;
+
+    reconocimientoVoz.value.onresult = (event) => {
+      let resultado = '';
+
+      for (let i = 0; i < event.results.length; i++) {
+        resultado += event.results[i][0].transcript + ' ';
+      }
+
+      textoEntrada.value = textoAntiguo+resultado;
+    }
+  };
+
+  reconocimientoVoz.value.onend = () => {
+      reconocimientoVoz.value.stop();
+      reconocimientoVoz.value = null;
+    };
+};
+
+const leerTexto = (idioma,texto) => {
+  const synthesis = window.speechSynthesis;
+  if(lectura.value===false){
+    const message = new SpeechSynthesisUtterance(texto);
+
+    message.lang = idiomasClave[idioma];
+
+    synthesis.speak(message);
+
+    lectura.value=true;
+    message.onend = () => {
+      lectura.value = false;
+    };
+  }else{
+    synthesis.cancel();
+
+    lectura.value=false;
+  }
+  
+};
+
+const estiloBotonResolucion = computed(() => {
+  if (vuetify.display.xlAndUp.value) {
+    return "margin-left: 15px;margin-top: 5px";
+  } else if (vuetify.display.lg.value) {
+    return "margin-left: 30px;margin-top: 5px";
+  } else if (vuetify.display.md.value) {
+    return "margin-top: 5px";
+  }else if (vuetify.display.sm.value) {
+    return "margin-left: 20px;margin-top: 5px";
+  }else if (vuetify.display.xs.value) {
+    return "margin-top: 5px";
+  }
+});
+
+const tamañoResolucion = computed(() => {
+  if (vuetify.display.xlAndUp.value) {
+    return 1;
+  } else if (vuetify.display.lg.value) {
+    return 1;
+  } else if (vuetify.display.md.value) {
+    return 1;
+  }else if (vuetify.display.sm.value) {
+    return 1;
+  }
+  else if (vuetify.display.xs.value) {
+    return 2;
+  }
+});
 
 const alturaResolucion = computed(() => {
   if (vuetify.display.xlAndUp.value) {
@@ -229,6 +423,7 @@ const tamañoBotonTraducirResolucion = computed(() => {
     return "large";
   }
 });
+
 </script>
 
 <style>
