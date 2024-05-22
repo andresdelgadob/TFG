@@ -9,7 +9,7 @@
                         {{ error }}
                     </v-col>
                     <v-col :cols="3">
-                        <v-btn v-if="error" @click="clearError" icon size="x-small"> <v-icon>mdi-close</v-icon> </v-btn>
+                        <v-btn v-if="error" @click="borrarError" icon size="x-small"> <v-icon>mdi-close</v-icon> </v-btn>
                     </v-col>
                 </v-row>
                 
@@ -30,7 +30,7 @@
             <!-- Primer v-sheet a la izquierda -->
             <v-row v-if="vuetify.display.lgAndUp.value">
                 <v-col xl="5">
-                    <v-sheet :class="model" width="100%" :height="alturaResolucion" style="min-width: 480px; margin-top: 20px;" color="info">
+                    <v-sheet :class="modelo" width="100%" :height="alturaResolucion" style="min-width: 480px; margin-top: 20px;" color="info">
                         <!-- Contenido del primer v-sheet -->
                         <v-combobox clearable label="Idioma" :items="idiomas" v-model="idiomaEntradaSeleccionado" rounded="t-xl"
                             :class="{ 'error--text': campoObligatorio }">
@@ -38,21 +38,21 @@
 
                         <v-form class="mx-5">
                             <v-textarea clearable label="Ingrese el texto aquí" variant="outlined" hide-details v-model="textoEntrada" no-resize
-                            :rows="calcularFilas" :readonly="contarPalabras() > 2500">
+                            :rows="calcularFilas" :readonly="contarCaracteres() > 2500">
                             </v-textarea>
                         </v-form>
 
                         <v-row>
-                            <v-col :cols="tamañoResolucion"><v-btn rounded="xl" size="small" style="margin-left: 15px;margin-top: 5px;" @click="recogerTextoVoz"
+                            <v-col :cols="columnasBotonReconocimiento"><v-btn rounded="xl" size="small" style="margin-left: 15px;margin-top: 5px;" @click="recogerTextoVoz"
                             :disabled="!reconocimientoDisponible"><v-icon>{{ reconocimientoVoz ? 'mdi-record' : 'mdi-microphone' }}</v-icon></v-btn>
                             </v-col>
                             <v-col>
-                            <v-btn  rounded="xl" size="small" :style="estiloBotonResolucion" @click="leerTexto(idiomaEntradaSeleccionado,textoEntrada)" :disabled="!textoEntrada">
+                            <v-btn  rounded="xl" size="small" :style="margenBotonLeer" @click="leerTexto(idiomaEntradaSeleccionado,textoEntrada)" :disabled="!textoEntrada">
                                 <v-icon>{{ lectura ? 'mdi-stop' : 'mdi-volume-high' }} </v-icon>
                                 </v-btn>
                             </v-col>
                             <v-col>
-                            <p style="text-align: right; margin-right: 20px;margin-top: 5px;">{{ contarPalabras(textoEntrada) }}/2500</p>
+                            <p style="text-align: right; margin-right: 20px;margin-top: 5px;">{{ contarCaracteres(textoEntrada) }}/2500</p>
                             </v-col>
                         </v-row>
                     </v-sheet>
@@ -68,7 +68,7 @@
                     <v-row justify="center" style="height: 40%;">
                         <v-btn @click="configuracion = true" color="info" rounded="xl" :size="tamañoBotonesResolucion" prepend-icon="mdi-cog" stacked></v-btn>
                         <v-dialog v-model="configuracion" :height="320" :width="480">
-                            <v-card  :class="model" :height="320" :width="480">
+                            <v-card  :class="modelo" :height="320" :width="480">
                                 <v-container>
                                     <v-row class="mb-0">
                                         <v-col>
@@ -122,7 +122,7 @@
 
                 <v-col xl="5">
                     <!-- Segundo v-sheet a la derecha -->
-                    <v-sheet :class="model" color="info" width="100%" :height="alturaResolucion" style="position: relative; min-width: 480px; margin-top: 20px;">
+                    <v-sheet :class="modelo" color="info" width="100%" :height="alturaResolucion" style="position: relative; min-width: 480px; margin-top: 20px;">
                         <!-- Contenido del segundo v-sheet -->
                             <v-progress-circular v-if="cargando" indeterminate style="z-index: 1; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"></v-progress-circular>
                             <v-combobox
@@ -136,7 +136,7 @@
 
                             <v-form class="mx-5">
                                 <v-textarea 
-                                    :class="modelOutput"
+                                    :class="modeloSalida"
                                     label="Traducción"
                                     variant="outlined"
                                     hide-details
@@ -157,7 +157,7 @@
 
             <v-col v-if="vuetify.display.mdAndDown.value">
                 <v-row>
-                    <v-sheet :class="model" width="100%" height=270px style="position: relative;min-width: 220px;margin-top: 20px;" color="info">
+                    <v-sheet :class="modelo" width="100%" height=270px style="position: relative;min-width: 220px;margin-top: 20px;" color="info">
                         <!-- Contenido del primer v-sheet -->
                         <v-combobox clearable label="Idioma" :items="idiomas" v-model="idiomaEntradaSeleccionado" rounded="t-xl"
                             :class="{ 'error--text': campoObligatorio }">
@@ -165,21 +165,21 @@
 
                         <v-form class="mx-5">
                             <v-textarea clearable label="Ingrese el texto aquí" variant="outlined" hide-details v-model="textoEntrada" no-resize
-                            :rows="calcularFilas" :readonly="contarPalabras() > 2500">
+                            :rows="calcularFilas" :readonly="contarCaracteres() > 2500">
                             </v-textarea>
                         </v-form>
 
                         <v-row>
-                            <v-col :cols="tamañoResolucion"><v-btn rounded="xl" size="small" style="margin-left: 15px;margin-top: 5px;" @click="recogerTextoVoz"
+                            <v-col :cols="columnasBotonReconocimiento"><v-btn rounded="xl" size="small" style="margin-left: 15px;margin-top: 5px;" @click="recogerTextoVoz"
                             :disabled="!reconocimientoDisponible"><v-icon>{{ reconocimientoVoz ? 'mdi-record' : 'mdi-microphone' }}</v-icon></v-btn>
                             </v-col>
                             <v-col>
-                            <v-btn  rounded="xl" size="small" :style="estiloBotonResolucion" @click="leerTexto(idiomaEntradaSeleccionado,textoEntrada)" :disabled="!textoEntrada">
+                            <v-btn  rounded="xl" size="small" :style="margenBotonLeer" @click="leerTexto(idiomaEntradaSeleccionado,textoEntrada)" :disabled="!textoEntrada">
                                 <v-icon>{{ lectura ? 'mdi-stop' : 'mdi-volume-high' }} </v-icon>
                                 </v-btn>
                             </v-col>
                             <v-col>
-                            <p style="text-align: right; margin-right: 20px;margin-top: 5px;">{{ contarPalabras(textoEntrada) }}/2500</p>
+                            <p style="text-align: right; margin-right: 20px;margin-top: 5px;">{{ contarCaracteres(textoEntrada) }}/2500</p>
                             </v-col>
                         </v-row>
                     </v-sheet>
@@ -190,7 +190,7 @@
                         <v-btn style="margin-bottom: 10px; margin-top: 10px;" @click="traducir" color="info" rounded="xl" prepend-icon="mdi-arrow-right-bold" stacked>Traducir</v-btn>
                         <v-btn style="text-align: left; margin-left: auto; margin-top: 18px;" @click="configuracion = true" color="info" rounded="xl" size="x-small" prepend-icon="mdi-cog" stacked></v-btn>
                         <v-dialog v-model="configuracion" :height="300" :width="320">
-                            <v-card  :class="model" :height="300" :width="320">
+                            <v-card  :class="modelo" :height="300" :width="320">
                                 <v-container>
                                     <v-row class="mb-0">
                                         <v-col cols="8" class="d-flex align-center">
@@ -243,7 +243,7 @@
 
                 <v-row >
                     <!-- Segundo v-sheet a la derecha -->
-                    <v-sheet :class="model" color="info" width="100%" height=270px style="position: relative;min-width: 220px;">
+                    <v-sheet :class="modelo" color="info" width="100%" height=270px style="position: relative;min-width: 220px;">
                         <!-- Contenido del segundo v-sheet -->
                             <v-progress-circular v-if="cargando" indeterminate style="z-index: 1; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"></v-progress-circular>
                             <v-combobox
@@ -257,7 +257,7 @@
 
                             <v-form class="mx-5">
                                 <v-textarea 
-                                    :class="modelOutput"
+                                    :class="modeloSalida"
                                     label="Traducción"
                                     variant="outlined"
                                     hide-details
@@ -285,8 +285,8 @@ import vuetify from './plugins/vuetify'
 import idiomas from './assets/idiomas.json';
 import idiomasClave from './assets/idiomasClave.json';
 
-const model='rounded-xl';
-const modelOutput='.rounded-t-xl';
+const modelo='rounded-xl';
+const modeloSalida='.rounded-t-xl';
 const idiomaEntradaSeleccionado= ref('');
 const idiomaSalidaSeleccionado= ref('');
 const textoEntrada= ref('');
@@ -351,7 +351,7 @@ const intercambiarIdiomas = () => {
   idiomaSalidaSeleccionado.value = temp;
 };
 
-const clearError = () => {
+const borrarError = () => {
     error.value = null;
 };
 
@@ -367,10 +367,10 @@ const calcularFilas = computed(() => {
 
 const mostrarAlertaError = (mensaje) => {
     error.value = mensaje;
-    setTimeout(clearError, 4000);
+    setTimeout(borrarError, 4000);
 };
 
-const contarPalabras = function () {
+const contarCaracteres = function () {
   if (!textoEntrada.value) {
     return 0;
   }
@@ -427,7 +427,7 @@ const leerTexto = (idioma,texto) => {
   
 };
 
-const estiloBotonResolucion = computed(() => {
+const margenBotonLeer = computed(() => {
   if (vuetify.display.xlAndUp.value) {
     return "margin-left: 15px;margin-top: 5px";
   } else if (vuetify.display.lg.value) {
@@ -441,7 +441,7 @@ const estiloBotonResolucion = computed(() => {
   }
 });
 
-const tamañoResolucion = computed(() => {
+const columnasBotonReconocimiento = computed(() => {
   if (vuetify.display.xlAndUp.value) {
     return 1;
   } else if (vuetify.display.lg.value) {
@@ -485,22 +485,6 @@ const tamañoBotonTraducirResolucion = computed(() => {
 <style>
 .content-container {
   margin-top: 60px;
-}
-.content-div {
-  margin-right: 20px;
-  margin-left: 20px;
-}
-
-.content-center {
-    align-self: top;
-}
-
-.small-button {
-  font-size: 12px; /* Ajusta el tamaño de la fuente del botón */
-  padding: 8px 16px; /* Ajusta el relleno del botón para cambiar su tamaño */
-}
-.no-scroll {
-  overflow-x: hidden;
 }
 .custom-alert {
   max-width: 300px; 
