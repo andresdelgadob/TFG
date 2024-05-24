@@ -20,7 +20,7 @@
 
         <v-app-bar color="primary">
             <div class="d-flex align-center">
-                <v-img contain height="100px" width="200px" src="logo uah blanco.png"></v-img>
+                <img src="./assets/logo_uah_blanco.png" alt="Logo UAH" style="margin: 10px; padding: 5px; width: 200px; height: 85px;">
                 <v-divider vertical ></v-divider>
                 <span class="mx-4" style="font-size: 24px;">IA Traductor</span>
             </div>
@@ -313,7 +313,7 @@ const traducir = () => {
         return;
     }
 
-    fetch('http://localhost:8001/public.php', {
+    fetch('http://localhost/public/traduccion', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json', // Tipo de contenido del cuerpo (JSON en este caso)
