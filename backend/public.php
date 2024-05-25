@@ -66,11 +66,12 @@ if(basename($_SERVER['REQUEST_URI'])==='traduccion'){
             $numCaracteres = strlen($textoEntrada)??0;  
 
             // Número de caracteres total traduccidas
-            $query = "SELECT SUM(num_caracteres) as total_caracteres FROM traducciones";
+            $query = "SELECT SUM(num_caracteres) as total_caracteres 
+            FROM traducciones  
+            WHERE fecha >= DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '4 days';";
             $result = $conn->query($query);
             $row = $result->fetch(PDO::FETCH_ASSOC);
-            $totalCaracteres = $row['total_palabras']+$numCaracteres;
-
+            $totalCaracteres = $row['total_caracteres']??0+$numCaracteres;
             // Comprobación de límite de traducción de caracteres mensual
             if($totalCaracteres>=450000){
                 throw new Exception("Número máximo de traducciones mensual alcanzaddo");
