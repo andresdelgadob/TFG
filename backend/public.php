@@ -3,7 +3,7 @@
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-http_response_code(200);
+
 if(basename($_SERVER['REQUEST_URI'])==='traduccion'){
     // Permitir preflight request
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
