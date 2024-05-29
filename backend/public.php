@@ -25,7 +25,7 @@ if(basename($_SERVER['REQUEST_URI'])==='traduccion'){
             exit();
         } 
         if(empty($postData['idiomaSalida'])){
-            echo json_encode("Falta el idioma de salida");
+            echo json_encode("Falta el idioma de salida.");
             http_response_code(400);
             exit();
         } 
@@ -45,7 +45,7 @@ if(basename($_SERVER['REQUEST_URI'])==='traduccion'){
 
         // Si el idioma de salida es default mostrar error
         if($idiomaSalida=='default'){
-            echo json_encode("Idioma de salida incorrecto");
+            echo json_encode("Idioma de salida incorrecto.");
             http_response_code(400);
             exit();
         } 
@@ -54,7 +54,7 @@ if(basename($_SERVER['REQUEST_URI'])==='traduccion'){
         $host = 'localhost';
         $dbname = 'postgres';
         $user = 'postgres';
-        $password = 'andres';
+        $password = '';
         $port = '5433';
 
         // Conexión con la base de datos
@@ -116,7 +116,7 @@ function buscarClavePorPalabra($palabra, $array) {
 
 function traducir($textoEntrada,$idiomaEntrada,$idiomaSalida,$formal,$formato){
     // Datos para la solicitud
-    $apiKey = "bd7210a9-bcd9-df24-d8b8-01aec4676138:fx";
+    $apiKey = "";
 
     // Configuración de la solicitud cURL
     $url = "https://api-free.deepl.com/v2/translate";
@@ -157,7 +157,7 @@ function traducir($textoEntrada,$idiomaEntrada,$idiomaSalida,$formal,$formato){
 
     // Verificar si hubo algún error
     if (curl_errno($ch)) {
-        echo 'Error en la solicitud cURL: ' . curl_error($ch);
+        echo json_encode('Error en la solicitud cURL: ' . curl_error($ch));
     }
 
     // Cerrar la sesión cURL
